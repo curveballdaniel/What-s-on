@@ -1,6 +1,8 @@
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -101,7 +103,9 @@ public class NHLPanel extends JPanel implements SportsFrameInterface {
 			
 			// create panel for matchups for that certain day
 			JPanel dailyMatchups = new JPanel();
-			dailyMatchups.setLayout(new GridLayout(htmlRows.size(), 1, 0, 0));
+			dailyMatchups.setLayout(new GridBagLayout());
+			GridBagConstraints gridC = new GridBagConstraints();
+			int positionY = 0;
 			
 			for (Element matchRow: htmlRows) { // parse through each HTML table row, obtain necessary info
 				Element awayTeam = matchRow.select("td.Table2__td").get(0); // Tampa Bay
@@ -112,16 +116,23 @@ public class NHLPanel extends JPanel implements SportsFrameInterface {
 
 				JLabel timeLabel = new JLabel("Match starting at: " + gameTime.text(), SwingConstants.CENTER);
 				timeLabel.setFont(matchupFont);
-				dailyMatchups.add(timeLabel); // add live time
+				gridC.gridx = 0;
+				gridC.gridy = positionY;
+				//gridC.ipady = 60;
+				gridC.gridheight = 1;
+				
 				System.out.println(timeLabel.getText() + " " + awayTeam.text() + " " + homeTeam.text());
+				dailyMatchups.add(timeLabel, gridC); // add live time
 				
 				try {
-					addImages(dailyMatchups, awayTeamImgString, awayTeam.text(), homeTeamImgString, homeTeam.text(), iconWidth, iconHeight); // add images to panel
+					addImages(dailyMatchups, gridC, positionY, awayTeamImgString, awayTeam.text(), homeTeamImgString, homeTeam.text(), iconWidth, iconHeight); // add images to panel
 				} catch (IOException e) {
 					e.printStackTrace();
 				} 
 
 				dailySchedulePanel.add(dailyMatchups); // add to matchup object
+				
+				positionY++; // increment y position
 			}
 			
 			JPanel separatorPanel = new JPanel();
@@ -136,7 +147,7 @@ public class NHLPanel extends JPanel implements SportsFrameInterface {
 		
 	}
 	
-	public void addImages(JPanel matchesBelow, String teamOneUnformattedImgHTML, String teamOneName, String teamTwoUnformattedImgHTML, String teamTwoName, int iconWidth, int iconHeight) throws IOException {
+	public void addImages(JPanel matchesBelow, GridBagConstraints gridBagC, int positionY, String teamOneUnformattedImgHTML, String teamOneName, String teamTwoUnformattedImgHTML, String teamTwoName, int iconWidth, int iconHeight) throws IOException {
 		JPanel matchup = new JPanel();
 		matchup.setLayout(new FlowLayout());
 		
@@ -164,8 +175,11 @@ public class NHLPanel extends JPanel implements SportsFrameInterface {
 			matchup.add(picLabelHome);
 		}
 		
+		gridBagC.gridx = 1;
+		gridBagC.gridy = positionY;
+		gridBagC.ipadx = 60;
 		// add everything to panel
-		matchesBelow.add(matchup);
+		matchesBelow.add(matchup, gridBagC);
 	}
 	
 	/**
