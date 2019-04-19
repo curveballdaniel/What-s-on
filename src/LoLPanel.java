@@ -21,6 +21,9 @@ import javax.swing.SwingConstants;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -222,6 +225,11 @@ public class LoLPanel extends JPanel implements SportsFrameInterface {
 	
 	public JPanel returnPanel() {
 		return this;
+	}
+	
+	// teams not located in API as of now
+	public JPanel obtainTeamRecord(String team) throws IOException {
+		return null;
 	}
 	
 	public void setBackground() {

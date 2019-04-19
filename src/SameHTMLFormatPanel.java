@@ -256,6 +256,29 @@ public class SameHTMLFormatPanel extends JPanel implements SportsFrameInterface 
 		return this;
 	}
 	
+	/**
+	 * method which takes an input url, and obtains the team's record in text
+	 * @param URL
+	 * @return
+	 * @throws IOException
+	 */
+	public JPanel obtainTeamRecord(String team, String URL) throws IOException {
+		JPanel teamRecord = new JPanel();
+		teamRecord.setLayout(new FlowLayout());
+		
+		Document doc = Jsoup.connect(URL).get();
+		
+		Elements teamStringRecord = doc.select("ul.ClubhouseHeader__Record");
+		
+		JLabel teamRecordLabel = new JLabel(team + ": " + teamStringRecord.text()); // , SwingConstants.CENTER
+		teamRecordLabel.setFont(matchupFont);
+		teamRecord.add(teamRecordLabel);
+		
+		System.out.println(team + ": " + teamStringRecord.text());
+		
+		return teamRecord; 
+	}
+	
 	public void setBackground() {
 		try {
 			backgroundImage = ImageIO.read(new URL(""));

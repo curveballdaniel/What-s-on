@@ -35,6 +35,8 @@ public class TitleFrame {
 
 	private JFrame frame;
 
+	Font titleFont = new Font("Elephant", Font.PLAIN, 55);
+	
 	/**
 	 * Launch the application.
 	 */
@@ -127,8 +129,12 @@ public class TitleFrame {
 		frame.getContentPane().add(nhlPanelPane);
 
 
-		// refresh button
-		JButton btnRefresh = new JButton("Refresh");
+		// extra info + refresh button
+		JPanel extras = new JPanel();
+		extras.setLayout(new GridLayout(6, 1, 0, 0));
+		
+		// create refresh button
+		JButton btnRefresh = new JButton("Refresh all");
 		btnRefresh.setFont(new Font("Elephant", Font.PLAIN, 55));
 		btnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -170,7 +176,24 @@ public class TitleFrame {
 				btnRefresh.setText("Refresh");
 			}
 		});
-		frame.getContentPane().add(btnRefresh);
 		
+		// add title to final panel
+		JLabel favTeamTitle = new JLabel("Favorite Team Standings: ");
+		favTeamTitle.setFont(titleFont);
+		extras.add(favTeamTitle);
+		
+		// add team records next to refresh button
+		try {
+			extras.add(nbaSchedules.obtainTeamRecord("New England Patriots", "http://www.espn.com/nfl/team/_/name/ne/new-england-patriots"));		
+			extras.add(nbaSchedules.obtainTeamRecord("Boston Red Sox", "http://www.espn.com/mlb/team/_/name/bos/boston-red-sox"));
+			extras.add(nbaSchedules.obtainTeamRecord("Boston Celtics", "http://www.espn.com/nba/team/_/name/bos/boston-celtics"));
+			extras.add(nbaSchedules.obtainTeamRecord("Boston Bruins", "http://www.espn.com/nhl/team/_/name/bos/boston-bruins"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		// add refresh button
+		extras.add(btnRefresh);
+		
+		frame.getContentPane().add(extras);
 	}
 }
